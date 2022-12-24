@@ -17,6 +17,7 @@ namespace CTeacher
         private List<string> hsk1Easy = new List<string>();
         private List<string> hsk1Hard = new List<string>();
         private int iterator = 0;
+        private bool revealed = false;
 
         public Form1()
         {
@@ -28,7 +29,7 @@ namespace CTeacher
             hsk1Hard.AddRange(File.ReadAllLines("HSK/hsk1hard.txt"));
 
             Randomise();
-            RevealCharacter();
+            Action();
         }
 
         private void Randomise()
@@ -37,24 +38,55 @@ namespace CTeacher
             hsk1Unknown = hsk1Unknown.OrderBy(_ => rand.Next()).ToList();
         }
 
-        private void Reveal(object sender, EventArgs e)
-        {
-            RevealCharacter();
-        }
-
         private void BaseForm_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
             {
-                RevealCharacter();
+                Action();
             }
             e.Handled = true;
         }
 
+        private void Action()
+        {
+            if (revealed)
+            {
+                NextCharacter();
+            } else
+            {
+                RevealCharacter();
+            }
+
+            revealed = !revealed;
+        }
+
         private void RevealCharacter()
         {
-            Console.WriteLine(iterator);
-            character1.Text = hsk1Unknown[iterator++];
+            pinyin1.Text = TinyPinyin.PinyinHelper.GetPinyin(character1.Text);
+            pinyin2.Text = TinyPinyin.PinyinHelper.GetPinyin(character2.Text);
+        }
+
+        private void NextCharacter()
+        {
+            pinyin1.Text = "";
+            character1.Text = hsk1Unknown[iterator];
+            iterator = (iterator + 1) % hsk1Unknown.Count;
+
+            if (iterator == 0)
+            {
+                Randomise();
+            }
+
+            pinyin2.Text = "";
+            character2.Text = hsk1Unknown[iterator];
+            iterator = (iterator + 1) % hsk1Unknown.Count;
+
+            if (iterator == 0)
+            {
+                Randomise();
+            }
+
+            iterater.Text = iterator.ToString();
         }
     }
 }
