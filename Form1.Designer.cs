@@ -34,6 +34,9 @@ namespace CTeacher
             this.character2 = new System.Windows.Forms.Label();
             this.pinyin2 = new System.Windows.Forms.Label();
             this.iterater = new System.Windows.Forms.Label();
+            this.hsk1 = new System.Windows.Forms.CheckBox();
+            this.hsk2 = new System.Windows.Forms.CheckBox();
+            this.range = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // character1
@@ -85,11 +88,46 @@ namespace CTeacher
             this.iterater.TabIndex = 5;
             this.iterater.Text = "Iterator";
             // 
+            // hsk1
+            // 
+            this.hsk1.AutoSize = true;
+            this.hsk1.Checked = true;
+            this.hsk1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hsk1.Location = new System.Drawing.Point(316, 26);
+            this.hsk1.Name = "hsk1";
+            this.hsk1.Size = new System.Drawing.Size(49, 17);
+            this.hsk1.TabIndex = 6;
+            this.hsk1.Text = "hsk1";
+            this.hsk1.UseVisualStyleBackColor = true;
+            this.hsk1.CheckedChanged += new System.EventHandler(this.hsk1_CheckedChanged);
+            // 
+            // hsk2
+            // 
+            this.hsk2.AutoSize = true;
+            this.hsk2.Location = new System.Drawing.Point(398, 26);
+            this.hsk2.Name = "hsk2";
+            this.hsk2.Size = new System.Drawing.Size(49, 17);
+            this.hsk2.TabIndex = 7;
+            this.hsk2.Text = "hsk2";
+            this.hsk2.UseVisualStyleBackColor = true;
+            this.hsk2.CheckedChanged += new System.EventHandler(this.hsk2_CheckedChanged);
+            // 
+            // range
+            // 
+            this.range.Location = new System.Drawing.Point(456, 24);
+            this.range.Name = "range";
+            this.range.Size = new System.Drawing.Size(100, 20);
+            this.range.TabIndex = 8;
+            this.range.TextChanged += new System.EventHandler(this.range_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 603);
+            this.Controls.Add(this.range);
+            this.Controls.Add(this.hsk2);
+            this.Controls.Add(this.hsk1);
             this.Controls.Add(this.iterater);
             this.Controls.Add(this.pinyin2);
             this.Controls.Add(this.character2);
@@ -110,6 +148,9 @@ namespace CTeacher
         private System.Windows.Forms.Label character2;
         private System.Windows.Forms.Label pinyin2;
         private System.Windows.Forms.Label iterater;
+        private System.Windows.Forms.CheckBox hsk1;
+        private System.Windows.Forms.CheckBox hsk2;
+        private System.Windows.Forms.TextBox range;
     }
 }
 

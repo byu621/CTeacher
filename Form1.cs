@@ -13,20 +13,22 @@ namespace CTeacher
 {
     public partial class Form1 : Form
     {
+        private List<string> currentSet = new List<string>();
         private List<string> hsk1Unknown = new List<string>();
-        private List<string> hsk1Easy = new List<string>();
-        private List<string> hsk1Hard = new List<string>();
+        private List<string> hsk2Unknown = new List<string>();
         private int iterator = 0;
         private bool revealed = false;
+        private int low = 0;
+        private int high = int.MaxValue;
 
         public Form1()
         {
-            this.KeyPreview = true;
+            KeyPreview = true;
             InitializeComponent();
 
             hsk1Unknown.AddRange(File.ReadAllLines("HSK/hsk1unknown.txt"));
-            hsk1Easy.AddRange(File.ReadAllLines("HSK/hsk1easy.txt"));
-            hsk1Hard.AddRange(File.ReadAllLines("HSK/hsk1hard.txt"));
+            hsk2Unknown.AddRange(File.ReadAllLines("HSK/hsk2unknown.txt"));
+            currentSet.AddRange(hsk1Unknown);
 
             Randomise();
             Action();
@@ -35,7 +37,7 @@ namespace CTeacher
         private void Randomise()
         {
             Random rand = new Random();
-            hsk1Unknown = hsk1Unknown.OrderBy(_ => rand.Next()).ToList();
+            currentSet = currentSet.OrderBy(_ => rand.Next()).ToList();
         }
 
         private void BaseForm_KeyUp(object sender, KeyEventArgs e)
@@ -43,8 +45,8 @@ namespace CTeacher
             if (e.KeyCode == Keys.Space)
             {
                 Action();
+                e.Handled = true;
             }
-            e.Handled = true;
         }
 
         private void Action()
@@ -68,9 +70,18 @@ namespace CTeacher
 
         private void NextCharacter()
         {
+            if (currentSet.Count == 0)
+            {
+                return;
+            }
+
             pinyin1.Text = "";
-            character1.Text = hsk1Unknown[iterator];
-            iterator = (iterator + 1) % hsk1Unknown.Count;
+            character1.Text = currentSet[iterator];
+            iterator++;
+            if (iterator == currentSet.Count)
+            {
+                iterator = 0;
+            }
 
             if (iterator == 0)
             {
@@ -78,8 +89,12 @@ namespace CTeacher
             }
 
             pinyin2.Text = "";
-            character2.Text = hsk1Unknown[iterator];
-            iterator = (iterator + 1) % hsk1Unknown.Count;
+            character2.Text = currentSet[iterator];
+            iterator++;
+            if (iterator == currentSet.Count)
+            {
+                iterator = 0;
+            }
 
             if (iterator == 0)
             {
@@ -87,6 +102,53 @@ namespace CTeacher
             }
 
             iterater.Text = iterator.ToString();
+        }
+
+        private void hsk1_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkbox = (CheckBox)sender;
+            currentSet.Clear();
+
+            if (checkbox.Checked)
+            {
+                for (int i = low; i <= high; i++)
+                {
+                    currentSet.Add(hsk1Unknown[i]);
+                }
+                Randomise();
+            } 
+
+            iterator = 0;
+        }
+
+        private void hsk2_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkbox = (CheckBox)sender;
+            currentSet.Clear();
+
+            if (checkbox.Checked)
+            {
+                for (int i = low; i <= high; i++)
+                {
+                    currentSet.Add(hsk2Unknown[i]);
+                }
+                Randomise();
+            }
+
+            iterator = 0;
+        }
+
+        private void range_TextChanged(object sender, EventArgs e)
+        {
+            if (!range.Text.Contains("-"))
+            {
+                low = 0;
+                high = int.MaxValue;
+                return;
+            }
+
+            low = int.Parse(range.Text.Split('-')[0]);
+            high = int.Parse(range.Text.Split('-')[1]);
         }
     }
 }
